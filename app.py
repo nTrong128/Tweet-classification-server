@@ -2,6 +2,7 @@ from contextlib import asynccontextmanager
 from enum import Enum
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
@@ -10,7 +11,6 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from gensim.models import Word2Vec
 from nltk.tokenize import word_tokenize
 import nltk
-from gensim.models import Word2Vec
 
 
 import joblib
@@ -177,3 +177,7 @@ async def predict(request: PredictionRequest):
 
     json_compatible_item_data = jsonable_encoder({"prediction": prediction})
     return JSONResponse(content=json_compatible_item_data)
+
+
+
+app.mount("/", StaticFiles(directory="./out", html=True), name="site")
